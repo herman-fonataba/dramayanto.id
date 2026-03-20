@@ -146,6 +146,7 @@
         window.addEventListener('load', async function() {
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             const username = sessionStorage.getItem('username');
+            const userPage = sessionStorage.getItem('userPage');
             
             if (!isLoggedIn || isLoggedIn !== 'true') {
                 alert('Anda harus login terlebih dahulu!');
@@ -153,10 +154,12 @@
                 return;
             }
             
+            // Tampilkan username
             document.getElementById('usernameDisplay').textContent = username;
             
+            // Verifikasi akses ke halaman ini
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page2.html`);
+                const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page1.html`);
                 const data = await response.json();
                 
                 if (!data.hasAccess) {
@@ -164,7 +167,7 @@
                     logout();
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error verifying access:', error);
             }
         });
         
