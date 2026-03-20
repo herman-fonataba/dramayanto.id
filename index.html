@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login System - GitHub to Sheets</title>
+    <title>Login System - Integrated with Google Sheets</title>
     <style>
         * {
             margin: 0;
@@ -19,22 +19,35 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+
+        /* Background animation */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .login-container {
-            background: white;
+            background: rgba(255, 255, 255, 0.98);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             width: 100%;
-            max-width: 400px;
-            animation: fadeIn 0.5s ease;
+            max-width: 440px;
+            animation: fadeInUp 0.6s ease;
+            position: relative;
+            z-index: 1;
         }
 
-        @keyframes fadeIn {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -42,39 +55,58 @@
             }
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
         .login-container h2 {
             text-align: center;
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 8px;
+            color: #1f2937;
             font-size: 28px;
+            font-weight: 700;
         }
 
         .subtitle {
             text-align: center;
-            color: #666;
-            margin-bottom: 30px;
+            color: #6b7280;
+            margin-bottom: 32px;
             font-size: 14px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
+            color: #374151;
             font-weight: 500;
             font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 16px;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
             transition: all 0.3s;
+            font-family: inherit;
         }
 
         .form-group input:focus {
@@ -85,19 +117,20 @@
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s;
         }
 
         button:hover:not(:disabled) {
             transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
         button:disabled {
@@ -106,33 +139,56 @@
         }
 
         .error-message {
-            background: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 10px;
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
             font-size: 14px;
             display: none;
-            border-left: 4px solid #c33;
+            border-left: 4px solid #dc2626;
         }
 
         .loading {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 16px;
             color: #667eea;
             display: none;
             font-size: 14px;
         }
 
-        .info {
-            background: #e8f0fe;
-            color: #1a73e8;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        .info-card {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .info-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-list {
             font-size: 12px;
-            text-align: center;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .info-list span {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin: 0 4px;
         }
 
         .spinner {
@@ -144,20 +200,38 @@
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
             margin-right: 8px;
+            vertical-align: middle;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>🔐 Login</h2>
+        <div class="logo">
+            <div class="logo-icon">🔐</div>
+        </div>
+        <h2>Selamat Datang</h2>
         <div class="subtitle">Masuk ke dashboard Anda</div>
         
-        <div class="info">
-            💡 Gunakan username dan password yang terdaftar di Google Sheets
+        <div class="info-card">
+            <div class="info-title">
+                📋 Informasi Akun Demo
+            </div>
+            <div class="info-list">
+                <strong>Halaman 1:</strong> user1 / pass1<br>
+                <strong>Halaman 2:</strong> user2 / pass2<br>
+                <strong>Halaman 3:</strong> user3 / pass3
+            </div>
         </div>
         
         <div class="error-message" id="errorMessage"></div>
@@ -177,10 +251,14 @@
                 Memverifikasi...
             </div>
         </form>
+        
+        <div class="footer">
+            Sistem terintegrasi dengan Google Sheets
+        </div>
     </div>
 
     <script>
-        // GANTI DENGAN URL APPS SCRIPT ANDA
+        // Google Apps Script URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ78buixkMrOrFPWf-Ka0jB112nrdt9noU3W4NyWtRNs8uQhL7H-yE9ahPqXj2SDxH/exec';
         
         const loginForm = document.getElementById('loginForm');
@@ -201,24 +279,41 @@
                 return;
             }
             
+            // Reset error display
             errorMessage.style.display = 'none';
+            
+            // Show loading state
             loginBtn.disabled = true;
-            loginBtn.innerHTML = 'Loading...';
+            loginBtn.innerHTML = 'Memproses...';
             loading.style.display = 'block';
             
             try {
+                // Call Google Apps Script
                 const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
                 const data = await response.json();
                 
                 if (data.success) {
+                    // Store session data
                     sessionStorage.setItem('isLoggedIn', 'true');
                     sessionStorage.setItem('username', data.username);
                     sessionStorage.setItem('userPage', data.page);
                     sessionStorage.setItem('pageName', data.pageName);
-                    sessionStorage.setItem('role', data.role || '');
+                    sessionStorage.setItem('role', data.role || 'User');
                     sessionStorage.setItem('loginTime', new Date().toISOString());
                     
+                    // Redirect to respective page
                     window.location.href = data.page;
                 } else {
                     showError(data.message || 'Username atau password salah!');
@@ -227,8 +322,16 @@
                     usernameInput.focus();
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showError('Koneksi gagal. Periksa koneksi internet Anda.');
+                console.error('Login error:', error);
+                
+                let errorMsg = 'Koneksi gagal. ';
+                if (error.message.includes('Failed to fetch')) {
+                    errorMsg += 'Pastikan Apps Script sudah di-deploy dengan akses publik. ';
+                    errorMsg += 'Cek URL Apps Script di file ini sudah benar.';
+                } else {
+                    errorMsg += error.message;
+                }
+                showError(errorMsg);
             } finally {
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = 'Login';
@@ -241,10 +344,18 @@
             errorMessage.style.display = 'block';
             setTimeout(() => {
                 errorMessage.style.display = 'none';
-            }, 5000);
+            }, 6000);
         }
         
+        // Auto focus on username
         usernameInput.focus();
+        
+        // Enter key submit
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
     </script>
 </body>
 </html>
