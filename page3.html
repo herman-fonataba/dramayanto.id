@@ -12,133 +12,167 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fa;
         }
 
-        .container {
+        .navbar {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .username {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
         }
 
         .btn-logout {
-            background: #dc3545;
+            background: rgba(255,255,255,0.2);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
         }
 
-        .btn-logout:hover {
-            background: #c82333;
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         h1 {
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 0.5rem;
         }
 
-        .setting-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
         }
 
-        .setting-item label {
+        .setting-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .setting-group label {
             display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
         }
 
-        .setting-item input, .setting-item select {
-            padding: 8px;
+        .setting-group input,
+        .setting-group select {
             width: 100%;
-            max-width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .setting-group input:focus,
+        .setting-group select:focus {
+            outline: none;
+            border-color: #4facfe;
         }
 
         .btn-save {
-            background: #28a745;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1rem;
             cursor: pointer;
+            margin-top: 1rem;
         }
 
-        .btn-save:hover {
-            background: #218838;
+        .message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            display: none;
         }
 
-        .user-info {
+        .message.success {
             background: #d4edda;
             color: #155724;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>Halaman 3 - Pengaturan</h2>
-            <button class="btn-logout" onclick="logout()">Logout</button>
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="logo">⚙️ Pengaturan</div>
+            <div class="user-info">
+                <span class="username" id="usernameDisplay"></span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
         </div>
-        <div class="content">
-            <div class="user-info" id="userInfo"></div>
+    </div>
+
+    <div class="container">
+        <div class="card">
             <h1>Pengaturan Akun</h1>
-            <p>Halaman pengaturan ini hanya bisa diakses oleh pengguna dengan akses Halaman 3.</p>
+            <p class="subtitle">Kelola preferensi dan informasi akun Anda</p>
             
-            <div class="setting-item">
-                <label>Nama Lengkap:</label>
+            <div class="setting-group">
+                <label>Nama Lengkap</label>
                 <input type="text" id="fullname" placeholder="Masukkan nama lengkap">
             </div>
             
-            <div class="setting-item">
-                <label>Email:</label>
+            <div class="setting-group">
+                <label>Email</label>
                 <input type="email" id="email" placeholder="Masukkan email">
             </div>
             
-            <div class="setting-item">
-                <label>Bahasa:</label>
+            <div class="setting-group">
+                <label>Bahasa</label>
                 <select id="language">
-                    <option value="id">Indonesia</option>
+                    <option value="id">Bahasa Indonesia</option>
                     <option value="en">English</option>
                 </select>
             </div>
             
             <button class="btn-save" onclick="saveSettings()">Simpan Pengaturan</button>
-            <div id="message" style="margin-top: 10px; color: green; display: none;"></div>
+            <div id="message" class="message"></div>
         </div>
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwB6HPpiBrBVBFxMBOVVWR_AU4Vfc82PB1vp-OqG9kbuh1TyNsZQ5e1qzLnSD27gy3N/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ78buixkMrOrFPWf-Ka0jB112nrdt9noU3W4NyWtRNs8uQhL7H-yE9ahPqXj2SDxH/exec';
         
         window.addEventListener('load', async function() {
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
@@ -150,7 +184,7 @@
                 return;
             }
             
-            document.getElementById('userInfo').innerHTML = `<strong>Logged in as:</strong> ${username}`;
+            document.getElementById('usernameDisplay').textContent = username;
             
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page3.html`);
@@ -161,14 +195,9 @@
                     logout();
                 }
             } catch (error) {
-                console.error('Error verifying access:', error);
+                console.error('Error:', error);
             }
         });
-        
-        function logout() {
-            sessionStorage.clear();
-            window.location.href = 'index.html';
-        }
         
         function saveSettings() {
             const fullname = document.getElementById('fullname').value;
@@ -177,8 +206,8 @@
             
             if (fullname && email) {
                 const messageDiv = document.getElementById('message');
-                messageDiv.textContent = 'Pengaturan berhasil disimpan!';
-                messageDiv.style.display = 'block';
+                messageDiv.textContent = '✅ Pengaturan berhasil disimpan!';
+                messageDiv.className = 'message success';
                 
                 setTimeout(() => {
                     messageDiv.style.display = 'none';
@@ -186,6 +215,11 @@
             } else {
                 alert('Harap isi semua field yang diperlukan!');
             }
+        }
+        
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
         }
     </script>
 </body>
