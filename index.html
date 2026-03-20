@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login System with Google Sheets</title>
+    <title>Login System - GitHub to Sheets</title>
     <style>
         * {
             margin: 0;
@@ -12,27 +12,48 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
         .login-container {
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .login-container h2 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             color: #333;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
         }
 
         .form-group {
@@ -44,20 +65,23 @@
             margin-bottom: 8px;
             color: #555;
             font-weight: 500;
+            font-size: 14px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            font-family: inherit;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         button {
@@ -66,14 +90,16 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         button:disabled {
@@ -82,108 +108,153 @@
         }
 
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
+            font-size: 14px;
             display: none;
+            border-left: 4px solid #c33;
         }
 
         .loading {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             color: #667eea;
             display: none;
+            font-size: 14px;
         }
 
         .info {
-            background: #e7f3ff;
-            color: #004085;
-            padding: 10px;
-            border-radius: 5px;
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 12px;
+            border-radius: 10px;
             margin-bottom: 20px;
             font-size: 12px;
+            text-align: center;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login ke Sistem</h2>
+        <h2>🔐 Login</h2>
+        <div class="subtitle">Masuk ke dashboard Anda</div>
+        
         <div class="info">
-            <strong>Info:</strong> Gunakan username dan password yang terdaftar di Google Sheets
+            💡 Gunakan username dan password yang terdaftar di Google Sheets
         </div>
+        
         <div class="error-message" id="errorMessage"></div>
+        
         <form id="loginForm">
             <div class="form-group">
-                <label>Username:</label>
-                <input type="text" id="username" required autocomplete="off">
+                <label>Username</label>
+                <input type="text" id="username" required autocomplete="off" placeholder="Masukkan username">
             </div>
             <div class="form-group">
-                <label>Password:</label>
-                <input type="password" id="password" required>
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="Masukkan password">
             </div>
             <button type="submit" id="loginBtn">Login</button>
-            <div class="loading" id="loading">Memverifikasi...</div>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                Memverifikasi...
+            </div>
         </form>
     </div>
 
     <script>
-        // Ganti dengan URL Google Apps Script Anda
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwB6HPpiBrBVBFxMBOVVWR_AU4Vfc82PB1vp-OqG9kbuh1TyNsZQ5e1qzLnSD27gy3N/exec';
+        // Ganti dengan URL Apps Script Anda setelah deploy
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ78buixkMrOrFPWf-Ka0jB112nrdt9noU3W4NyWtRNs8uQhL7H-yE9ahPqXj2SDxH/exec';
         
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('errorMessage');
-            const loginBtn = document.getElementById('loginBtn');
-            const loading = document.getElementById('loading');
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            
+            if (!username || !password) {
+                showError('Harap isi username dan password');
+                return;
+            }
             
             // Sembunyikan error sebelumnya
-            errorDiv.style.display = 'none';
+            errorMessage.style.display = 'none';
             
             // Tampilkan loading
             loginBtn.disabled = true;
+            loginBtn.innerHTML = 'Loading...';
             loading.style.display = 'block';
             
             try {
-                // Panggil Google Apps Script untuk verifikasi login
-                const response = await fetch(`${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+                // Panggil Google Apps Script
+                const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+                const response = await fetch(url);
                 const data = await response.json();
                 
                 if (data.success) {
                     // Simpan data login ke session storage
                     sessionStorage.setItem('isLoggedIn', 'true');
-                    sessionStorage.setItem('username', username);
+                    sessionStorage.setItem('username', data.username);
                     sessionStorage.setItem('userPage', data.page);
                     sessionStorage.setItem('pageName', data.pageName);
+                    sessionStorage.setItem('role', data.role);
+                    sessionStorage.setItem('loginTime', new Date().toISOString());
                     
                     // Redirect ke halaman yang sesuai
                     window.location.href = data.page;
                 } else {
-                    errorDiv.style.display = 'block';
-                    errorDiv.textContent = data.message || 'Username atau password salah!';
-                    
-                    setTimeout(() => {
-                        errorDiv.style.display = 'none';
-                    }, 3000);
+                    showError(data.message || 'Username atau password salah!');
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                    usernameInput.focus();
                 }
             } catch (error) {
                 console.error('Error:', error);
-                errorDiv.style.display = 'block';
-                errorDiv.textContent = 'Terjadi kesalahan koneksi. Silakan coba lagi.';
-                
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 3000);
+                showError('Koneksi gagal. Periksa koneksi internet Anda.');
             } finally {
                 loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Login';
                 loading.style.display = 'none';
             }
         });
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Auto focus on username
+        usernameInput.focus();
     </script>
 </body>
 </html>
