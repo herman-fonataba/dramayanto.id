@@ -1,47 +1,55 @@
-# Login System dengan Google Sheets Database
+# 🔐 Login System with Google Sheets Database
 
-Sistem login dengan database menggunakan Google Sheets, dihosting di GitHub Pages.
+Sistem login terintegrasi dengan Google Sheets sebagai database. Dihosting di GitHub Pages.
 
-## 🚀 Fitur
+## ✨ Fitur
 
-- Login dengan username dan password dari Google Sheets
-- 3 halaman berbeda dengan akses terpisah
-- Validasi akses per halaman
-- Session management
-- Desain responsive modern
+- ✅ Login dengan username & password dari Google Sheets
+- ✅ 3 halaman berbeda dengan akses terpisah
+- ✅ Validasi akses per halaman
+- ✅ Session management dengan sessionStorage
+- ✅ Desain modern dan responsive
+- ✅ Tanpa backend server (serverless)
 
-## 📋 Setup
+## 📋 Struktur Halaman
 
-### 1. Google Sheets Setup
-- Buat Google Sheet baru
-- Buat sheet dengan nama "Users"
-- Isi data sesuai template:
-  - Kolom A: Username
-  - Kolom B: Password
-  - Kolom C: Page File (page1.html, page2.html, page3.html)
-  - Kolom D: Page Name
-  - Kolom E: Role
+| Halaman | Username | Password | Deskripsi |
+|---------|----------|----------|-----------|
+| page1.html | user1 | pass1 | Dashboard Utama |
+| page2.html | user2 | pass2 | Data Analisis |
+| page3.html | user3 | pass3 | Pengaturan Akun |
+
+## 🚀 Cara Setup
+
+### 1. Google Sheets
+Buat Google Sheet dengan struktur:
+
+| A (Username) | B (Password) | C (Page File) | D (Page Name) | E (Role) |
+|--------------|--------------|---------------|---------------|----------|
+| user1 | pass1 | page1.html | Dashboard | Admin |
+| user2 | pass2 | page2.html | Analisis | Analyst |
+| user3 | pass3 | page3.html | Pengaturan | User |
 
 ### 2. Google Apps Script
-- Buka Google Sheet > Extensions > Apps Script
-- Copy paste kode Apps Script
-- Ganti `YOUR_GOOGLE_SHEET_ID` dengan ID Sheet Anda
-- Deploy sebagai Web App
-- Copy URL Apps Script
+1. Buka Google Sheet > Extensions > Apps Script
+2. Paste kode Apps Script yang sudah disediakan
+3. Ganti `YOUR_SHEET_ID` dengan ID Sheet Anda
+4. Deploy sebagai Web App dengan akses "Anyone"
+5. Copy URL Apps Script
 
 ### 3. Update HTML Files
-- Ganti `SCRIPT_URL` di semua file HTML dengan URL Apps Script Anda
+Ganti `SCRIPT_URL` di semua file HTML dengan URL Apps Script Anda
 
 ### 4. Upload ke GitHub
-- Upload semua file HTML ke repository GitHub
-- Enable GitHub Pages di repository settings
+1. Upload semua file HTML ke repository GitHub
+2. Enable GitHub Pages di Settings > Pages
 
-## 🔐 Data Login Contoh
+## 🛠️ Teknologi
 
-| Username | Password | Halaman |
-|----------|----------|---------|
-| user1    | pass1    | page1.html |
-| user2    | pass2    | page2.html |
-| user3    | pass3    | page3.html |
+- HTML5
+- CSS3 (Flexbox, Grid, Animations)
+- JavaScript (ES6+)
+- Google Sheets API
+- Google Apps Script
 
-## 📁 Struktur File
+## 📁 File Structure
