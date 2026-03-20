@@ -182,79 +182,40 @@
     </div>
 
     <script>
-        // Ganti dengan URL Apps Script Anda setelah deploy
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ78buixkMrOrFPWf-Ka0jB112nrdt9noU3W4NyWtRNs8uQhL7H-yE9ahPqXj2SDxH/exec';
         
-        const loginForm = document.getElementById('loginForm');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginBtn = document.getElementById('loginBtn');
-        const loading = document.getElementById('loading');
-        const errorMessage = document.getElementById('errorMessage');
-        
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        window.addEventListener('load', async function() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const username = sessionStorage.getItem('username');
+            const userPage = sessionStorage.getItem('userPage');
             
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
-            
-            if (!username || !password) {
-                showError('Harap isi username dan password');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                alert('Anda harus login terlebih dahulu!');
+                window.location.href = 'index.html';
                 return;
             }
             
-            // Sembunyikan error sebelumnya
-            errorMessage.style.display = 'none';
+            // Tampilkan username
+            document.getElementById('usernameDisplay').textContent = username;
             
-            // Tampilkan loading
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = 'Loading...';
-            loading.style.display = 'block';
-            
+            // Verifikasi akses ke halaman ini
             try {
-                // Panggil Google Apps Script
-                const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-                const response = await fetch(url);
+                const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page1.html`);
                 const data = await response.json();
                 
-                if (data.success) {
-                    // Simpan data login ke session storage
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    sessionStorage.setItem('username', data.username);
-                    sessionStorage.setItem('userPage', data.page);
-                    sessionStorage.setItem('pageName', data.pageName);
-                    sessionStorage.setItem('role', data.role);
-                    sessionStorage.setItem('loginTime', new Date().toISOString());
-                    
-                    // Redirect ke halaman yang sesuai
-                    window.location.href = data.page;
-                } else {
-                    showError(data.message || 'Username atau password salah!');
-                    usernameInput.value = '';
-                    passwordInput.value = '';
-                    usernameInput.focus();
+                if (!data.hasAccess) {
+                    alert('Anda tidak memiliki akses ke halaman ini!');
+                    logout();
                 }
             } catch (error) {
-                console.error('Error:', error);
-                showError('Koneksi gagal. Periksa koneksi internet Anda.');
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = 'Login';
-                loading.style.display = 'none';
+                console.error('Error verifying access:', error);
             }
         });
         
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
         }
-        
-        // Auto focus on username
-        usernameInput.focus();
     </script>
 </body>
 </html>
