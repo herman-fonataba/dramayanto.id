@@ -177,6 +177,7 @@
         window.addEventListener('load', async function() {
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             const username = sessionStorage.getItem('username');
+            const userPage = sessionStorage.getItem('userPage');
             
             if (!isLoggedIn || isLoggedIn !== 'true') {
                 alert('Anda harus login terlebih dahulu!');
@@ -184,10 +185,12 @@
                 return;
             }
             
+            // Tampilkan username
             document.getElementById('usernameDisplay').textContent = username;
             
+            // Verifikasi akses ke halaman ini
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page3.html`);
+                const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page1.html`);
                 const data = await response.json();
                 
                 if (!data.hasAccess) {
@@ -195,27 +198,9 @@
                     logout();
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error verifying access:', error);
             }
         });
-        
-        function saveSettings() {
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const language = document.getElementById('language').value;
-            
-            if (fullname && email) {
-                const messageDiv = document.getElementById('message');
-                messageDiv.textContent = '✅ Pengaturan berhasil disimpan!';
-                messageDiv.className = 'message success';
-                
-                setTimeout(() => {
-                    messageDiv.style.display = 'none';
-                }, 3000);
-            } else {
-                alert('Harap isi semua field yang diperlukan!');
-            }
-        }
         
         function logout() {
             sessionStorage.clear();
