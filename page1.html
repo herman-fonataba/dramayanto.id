@@ -3,320 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Utama - Halaman 1</title>
+    <title>Executive Dashboard</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f3f4f6;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 2rem;
         }
-
-        /* Navbar */
-        .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar-content {
-            max-width: 1280px;
+        
+        .dashboard {
+            max-width: 1200px;
             margin: 0 auto;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid #334155;
+        }
+        
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo span {
-            font-size: 1.8rem;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .user-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-logout {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .btn-logout:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.02);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1280px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        /* Welcome Card */
-        .welcome-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 24px;
-            padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #3b82f6;
         }
-
-        .welcome-card h1 {
+        
+        .header h1 {
+            background: linear-gradient(120deg, #fbbf24, #f59e0b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
             font-size: 1.8rem;
-            margin-bottom: 0.5rem;
         }
-
-        .welcome-card p {
-            opacity: 0.9;
+        
+        .user-info {
+            background: #1e293b;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: #facc15;
         }
-
-        /* Stats Grid */
-        .stats-grid {
+        
+        .logout-btn {
+            background: #ef4444;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: scale(0.95);
+        }
+        
+        .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin: 2rem 0;
         }
-
-        .stat-card {
-            background: white;
+        
+        .card {
+            background: #1e293b;
             padding: 1.5rem;
-            border-radius: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 1.2rem;
+            border: 1px solid #334155;
         }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        
+        .card h3 {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-        }
-
-        .stat-title {
-            color: #6b7280;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .stat-value {
-            font-size: 2rem;
+        
+        .value {
+            font-size: 2.5rem;
             font-weight: bold;
-            color: #1f2937;
-            margin-top: 0.5rem;
+            color: #facc15;
+            margin: 0.5rem 0;
         }
-
-        .stat-change {
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            color: #10b981;
+        
+        .trend {
+            color: #4ade80;
+            font-size: 0.85rem;
         }
-
-        /* Content Cards */
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .content-card {
-            background: white;
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .content-card h3 {
-            color: #374151;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .activity-list {
-            list-style: none;
-        }
-
-        .activity-list li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .activity-list li:last-child {
-            border-bottom: none;
-        }
-
-        .activity-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #667eea;
-        }
-
-        .info-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-top: 1rem;
+        
+        .welcome {
+            background: #0f172a;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #cbd5e1;
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="navbar-content">
-            <div class="logo">
-                <span>📊</span> Dashboard Halaman 1
-            </div>
-            <div class="user-info">
-                <div class="user-badge">
-                    👤 <span id="usernameDisplay"></span>
-                </div>
-                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+    <div class="dashboard">
+        <div class="header">
+            <h1>🏆 EXECUTIVE DASHBOARD</h1>
+            <div>
+                <span class="user-info" id="userName">Loading...</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <div class="welcome-card">
-            <h1>Selamat Datang, <span id="welcomeName"></span>!</h1>
-            <p>Ini adalah halaman dashboard utama. Anda memiliki akses penuh ke modul ini.</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title">Total Pengguna</div>
-                    <div class="stat-icon">👥</div>
-                </div>
-                <div class="stat-value">1,234</div>
-                <div class="stat-change">↑ 12% dari bulan lalu</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title">Aktif Hari Ini</div>
-                    <div class="stat-icon">🟢</div>
-                </div>
-                <div class="stat-value">567</div>
-                <div class="stat-change">↑ 8% dari kemarin</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title">Total Transaksi</div>
-                    <div class="stat-icon">💰</div>
-                </div>
-                <div class="stat-value">Rp 89.2M</div>
-                <div class="stat-change">↑ 23% dari bulan lalu</div>
-            </div>
-        </div>
-
-        <div class="content-grid">
-            <div class="content-card">
-                <h3>📋 Aktivitas Terbaru</h3>
-                <ul class="activity-list">
-                    <li><div class="activity-dot"></div> Login hari ini - 08:30</li>
-                    <li><div class="activity-dot"></div> Update profil - Kemarin</li>
-                    <li><div class="activity-dot"></div> Lihat laporan - 2 hari lalu</li>
-                    <li><div class="activity-dot"></div> Download data - 3 hari lalu</li>
-                </ul>
-            </div>
-            <div class="content-card">
-                <h3>📌 Quick Access</h3>
-                <div class="info-box">
-                    <strong>✨ Fitur Unggulan:</strong><br>
-                    • Dashboard real-time<br>
-                    • Laporan mingguan<br>
-                    • Notifikasi push<br>
-                    • Export data Excel
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxMu_gceBPGKJjvj9vKllGpcfEIlrZySwyPJUKEejyGmx5RBddJ53dOhNsKY_0NeMs/exec';
         
-        window.addEventListener('load', async function() {
-            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-            const username = sessionStorage.getItem('username');
-            
-            if (!isLoggedIn || isLoggedIn !== 'true') {
-                alert('Anda harus login terlebih dahulu!');
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            // Display username
-            document.getElementById('usernameDisplay').textContent = username;
-            document.getElementById('welcomeName').textContent = username;
-            
-            // Verify access
-            try {
-                const response = await fetch(`${SCRIPT_URL}?action=verify&username=${encodeURIComponent(username)}&page=page1.html`, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (!data.hasAccess) {
-                        alert('Anda tidak memiliki akses ke halaman ini!');
-                        logout();
-                    }
-                }
-            } catch (error) {
-                console.log('Verifikasi skipped (CORS) - akses tetap diberikan');
-            }
-        });
+        <div class="grid">
+            <div class="card">
+                <h3>📊 TOTAL REVENUE</h3>
+                <div class="value">Rp 12.8B</div>
+                <div class="trend">↑ 23% vs last month</div>
+            </div>
+            <div class="card">
+                <h3>👥 ACTIVE USERS</h3>
+                <div class="value">128,450</div>
+                <div class="trend">↑ 12% growth</div>
+            </div>
+            <div class="card">
+                <h3>📦 ORDERS COMPLETED</h3>
+                <div class="value">3,842</div>
+                <div class="trend">This month</div>
+            </div>
+            <div class="card">
+                <h3>⭐ CUSTOMER SATISFACTION</h3>
+                <div class="value">4.8/5</div>
+                <div class="trend">+0.3 points</div>
+            </div>
+        </div>
+        
+        <div class="welcome" id="welcomeMsg"></div>
+    </div>
+    
+    <script>
+        // Cek autentikasi saat load
+        const session = sessionStorage.getItem('dashboardAuth');
+        const userData = session ? JSON.parse(session) : null;
+        
+        if (!userData || userData.dashboard !== 'direktur_utama') {
+            window.location.href = 'index.html';
+        }
+        
+        document.getElementById('userName').textContent = `👤 ${userData.displayName}`;
+        document.getElementById('welcomeMsg').innerHTML = `✨ Selamat datang, ${userData.displayName}. Akses penuh ke data eksekutif tersedia.`;
         
         function logout() {
             sessionStorage.clear();
