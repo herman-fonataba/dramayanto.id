@@ -3,166 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Dashboard</title>
+    <title>Dashboard 1 - Executive | Dramayanto</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             min-height: 100vh;
-            padding: 2rem;
+            padding: 20px;
         }
-        
+
         .dashboard {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 2rem;
-            padding: 2rem;
-            border: 1px solid #334155;
+            animation: fadeIn 0.4s ease-out;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
         .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #3b82f6;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        
+
         .header h1 {
-            background: linear-gradient(120deg, #fbbf24, #f59e0b);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            font-size: 1.8rem;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
+
         .user-info {
-            background: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.15);
             padding: 8px 20px;
             border-radius: 40px;
-            color: #facc15;
         }
-        
+
+        .user-name {
+            color: white;
+            font-weight: 500;
+        }
+
         .logout-btn {
-            background: #ef4444;
+            background: rgba(255,255,255,0.2);
             border: none;
             padding: 8px 20px;
             border-radius: 40px;
             color: white;
             cursor: pointer;
-            margin-left: 1rem;
-            transition: 0.2s;
+            transition: all 0.3s;
+            font-weight: 500;
         }
-        
+
         .logout-btn:hover {
-            background: #dc2626;
+            background: rgba(255,255,255,0.3);
             transform: scale(0.95);
         }
-        
-        .grid {
+
+        /* Stats Grid */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            gap: 24px;
+            margin-bottom: 30px;
         }
-        
-        .card {
-            background: #1e293b;
-            padding: 1.5rem;
-            border-radius: 1.2rem;
-            border: 1px solid #334155;
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
         }
-        
-        .card h3 {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
         }
-        
-        .value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #facc15;
-            margin: 0.5rem 0;
+
+        .stat-card h3 {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
-        
-        .trend {
-            color: #4ade80;
-            font-size: 0.85rem;
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
         }
-        
-        .welcome {
-            background: #0f172a;
-            padding: 1.2rem;
-            border-radius: 1rem;
-            margin-top: 1.5rem;
+
+        .stat-trend {
+            font-size: 13px;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #e6f7e6;
+            color: #10b981;
+        }
+
+        .stat-trend.down {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chart-card h3 {
+            color: #334155;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .chart-placeholder {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            height: 200px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px 30px;
+            border-radius: 24px;
+            margin-top: 20px;
             text-align: center;
-            color: #cbd5e1;
+            border: 1px solid #e2e8f0;
+        }
+
+        .welcome-message p {
+            color: #334155;
+            font-size: 15px;
+        }
+
+        /* Time Display */
+        .time-display {
+            text-align: right;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <div class="header">
-            <h1>🏆 EXECUTIVE DASHBOARD</h1>
-            <div>
-                <span class="user-info" id="userName">Loading...</span>
+            <h1>
+                <span>🏆</span> DASHBOARD 1 - EXECUTIVE
+            </h1>
+            <div class="user-info">
+                <span class="user-name" id="userName">Loading...</span>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
         </div>
-        
-        <div class="grid">
-            <div class="card">
+
+        <div class="stats-grid">
+            <div class="stat-card">
                 <h3>📊 TOTAL REVENUE</h3>
-                <div class="value">Rp 12.8B</div>
-                <div class="trend">↑ 23% vs last month</div>
+                <div class="stat-value">Rp 12.8B</div>
+                <span class="stat-trend">↑ 23% vs last month</span>
             </div>
-            <div class="card">
+            <div class="stat-card">
                 <h3>👥 ACTIVE USERS</h3>
-                <div class="value">128,450</div>
-                <div class="trend">↑ 12% growth</div>
+                <div class="stat-value">128,450</div>
+                <span class="stat-trend">↑ 12% growth</span>
             </div>
-            <div class="card">
+            <div class="stat-card">
                 <h3>📦 ORDERS COMPLETED</h3>
-                <div class="value">3,842</div>
-                <div class="trend">This month</div>
+                <div class="stat-value">3,842</div>
+                <span class="stat-trend">This month</span>
             </div>
-            <div class="card">
+            <div class="stat-card">
                 <h3>⭐ CUSTOMER SATISFACTION</h3>
-                <div class="value">4.8/5</div>
-                <div class="trend">+0.3 points</div>
+                <div class="stat-value">4.8 / 5</div>
+                <span class="stat-trend">↑ 0.3 points</span>
             </div>
         </div>
-        
-        <div class="welcome" id="welcomeMsg"></div>
+
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>📈 Monthly Revenue Trend</h3>
+                <div class="chart-placeholder">
+                    📊 [Grafik Revenue] Jan: 8.2B | Feb: 9.5B | Mar: 10.8B | Apr: 12.8B
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3>👥 User Growth</h3>
+                <div class="chart-placeholder">
+                    📈 [Grafik User] Q1: 98K | Q2: 112K | Q3: 128K
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-message" id="welcomeMsg"></div>
+        <div class="time-display" id="timeDisplay"></div>
     </div>
-    
+
+    <script src="js/auth-check.js"></script>
     <script>
-        // Cek autentikasi saat load
-        const session = sessionStorage.getItem('dashboardAuth');
-        const userData = session ? JSON.parse(session) : null;
-        
-        if (!userData || userData.dashboard !== 'direktur_utama') {
-            window.location.href = 'index.html';
+        // Ambil data dari session
+        const auth = sessionStorage.getItem('dashboardAuth');
+        if (auth) {
+            const userData = JSON.parse(auth);
+            document.getElementById('userName').textContent = `👤 ${userData.displayName}`;
+            document.getElementById('welcomeMsg').innerHTML = `
+                <p>✨ <strong>Selamat datang, ${userData.displayName}!</strong> ✨</p>
+                <p>Anda memiliki akses penuh ke data eksekutif perusahaan. Dashboard ini menampilkan metrik kinerja utama dan tren bisnis terkini.</p>
+            `;
         }
-        
-        document.getElementById('userName').textContent = `👤 ${userData.displayName}`;
-        document.getElementById('welcomeMsg').innerHTML = `✨ Selamat datang, ${userData.displayName}. Akses penuh ke data eksekutif tersedia.`;
-        
-        function logout() {
-            sessionStorage.clear();
-            window.location.href = 'index.html';
+
+        // Display current time
+        function updateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('timeDisplay').textContent = `🕐 ${now.toLocaleDateString('id-ID', options)} WIB`;
         }
+        updateTime();
+        setInterval(updateTime, 1000);
     </script>
 </body>
 </html>
