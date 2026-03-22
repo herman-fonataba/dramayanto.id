@@ -3,359 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login System - Integrated with Google Sheets</title>
+    <title>Secure Multi-Dashboard Login</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
-            position: relative;
-        }
-
-        /* Background animation */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            pointer-events: none;
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.98);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             width: 100%;
-            max-width: 440px;
-            animation: fadeInUp 0.6s ease;
-            position: relative;
-            z-index: 1;
+            max-width: 420px;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .login-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 2rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
+        .login-card h1 {
+            font-size: 2rem;
+            background: linear-gradient(120deg, #e0e7ff, #a5f3fc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
         }
 
-        .logo-icon {
-            font-size: 48px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            width: 70px;
-            height: 70px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        .subhead {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 12px;
         }
 
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 8px;
-            color: #1f2937;
-            font-size: 28px;
-            font-weight: 700;
+        .input-group {
+            margin-bottom: 1.25rem;
         }
 
-        .subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 32px;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group label {
+        .input-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #374151;
+            color: #cbd5e1;
+            font-size: 0.8rem;
             font-weight: 500;
-            font-size: 14px;
+            margin-bottom: 0.5rem;
         }
 
-        .form-group input {
+        .input-group input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 15px;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .form-group input:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #334155;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            color: #f1f5f9;
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transition: all 0.2s;
         }
 
-        button {
+        .input-group input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .login-btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(95deg, #2563eb, #1e40af);
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 12px;
+            border-radius: 40px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .error-message {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 14px;
-            display: none;
-            border-left: 4px solid #dc2626;
-        }
-
-        .loading {
-            text-align: center;
-            margin-top: 16px;
-            color: #667eea;
-            display: none;
-            font-size: 14px;
-        }
-
-        .info-card {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-        }
-
-        .info-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-list {
-            font-size: 12px;
-            color: #6b7280;
-            line-height: 1.6;
-        }
-
-        .info-list span {
-            display: inline-block;
-            background: #667eea;
+            font-size: 1rem;
             color: white;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            margin: 0 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.1s;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #667eea;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
+        .login-btn:hover {
+            transform: scale(0.98);
+            background: linear-gradient(95deg, #3b82f6, #2563eb);
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .footer {
+        .message {
+            margin-top: 1rem;
             text-align: center;
-            margin-top: 24px;
-            font-size: 12px;
-            color: #9ca3af;
+            font-size: 0.8rem;
+            padding: 8px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #facc15;
+        }
+
+        .info {
+            margin-top: 1rem;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #64748b;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <div class="logo-icon">🔐</div>
-        </div>
-        <h2>Selamat Datang</h2>
-        <div class="subtitle">Masuk ke dashboard Anda</div>
-        
-        <div class="info-card">
-            <div class="info-title">
-                📋 Informasi Akun Demo
-            </div>
-            <div class="info-list">
-                <strong>Halaman 1:</strong> user1 / pass1<br>
-                <strong>Halaman 2:</strong> user2 / pass2<br>
-                <strong>Halaman 3:</strong> user3 / pass3
-            </div>
-        </div>
-        
-        <div class="error-message" id="errorMessage"></div>
-        
-        <form id="loginForm">
-            <div class="form-group">
+        <div class="login-card">
+            <h1>🔐 Multi-Dashboard</h1>
+            <div class="subhead">4 dashboard berbeda · Autentikasi via Apps Script</div>
+            
+            <div class="input-group">
                 <label>Username</label>
-                <input type="text" id="username" required autocomplete="off" placeholder="Masukkan username">
+                <input type="text" id="username" placeholder="Masukkan username" autocomplete="off">
             </div>
-            <div class="form-group">
+            
+            <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="password" required placeholder="Masukkan password">
+                <input type="password" id="password" placeholder="Masukkan password">
             </div>
-            <button type="submit" id="loginBtn">Login</button>
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                Memverifikasi...
+            
+            <button class="login-btn" id="loginBtn">Login →</button>
+            <div class="message" id="message"></div>
+            <div class="info">
+                ⚡ Credentials diverifikasi oleh Google Apps Script<br>
+                Username & password tidak tersimpan di kode ini
             </div>
-        </form>
-        
-        <div class="footer">
-            Sistem terintegrasi dengan Google Sheets
         </div>
     </div>
 
     <script>
-        // Google Apps Script URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjMu_gceBPGKJjvj9vKllGpcfEIlrZySwyPJUKEejyGmx5RBddJ53dOhNsKY_0NeMs/exec';
+        // 🔧 GANTI DENGAN URL APPS SCRIPT ANDA
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSiycgafc698ucQj7dZ5x6smlu2JNjgJEq3oLBbkgrzGm2ea6B8SzLOGwqH-Zfml0i/exec";
         
-        const loginForm = document.getElementById('loginForm');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginBtn = document.getElementById('loginBtn');
-        const loading = document.getElementById('loading');
-        const errorMessage = document.getElementById('errorMessage');
+        document.getElementById('loginBtn').addEventListener('click', login);
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
         
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
+        async function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
             
             if (!username || !password) {
-                showError('Harap isi username dan password');
+                messageDiv.innerHTML = '❌ Username dan password harus diisi';
                 return;
             }
             
-            // Reset error display
-            errorMessage.style.display = 'none';
-            
-            // Show loading state
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = 'Memproses...';
-            loading.style.display = 'block';
+            messageDiv.innerHTML = '⏳ Memverifikasi...';
+            messageDiv.style.color = '#facc15';
             
             try {
-                // Call Google Apps Script
-                const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-                const response = await fetch(url, {
-                    method: 'GET',
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
                     mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                const result = await response.json();
                 
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Store session data
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    sessionStorage.setItem('username', data.username);
-                    sessionStorage.setItem('userPage', data.page);
-                    sessionStorage.setItem('pageName', data.pageName);
-                    sessionStorage.setItem('role', data.role || 'User');
-                    sessionStorage.setItem('loginTime', new Date().toISOString());
-                    
-                    // Redirect to respective page
-                    window.location.href = data.page;
+                if (result.success) {
+                    // Redirect ke dashboard yang sesuai
+                    const dashboardUrl = result.dashboardUrl;
+                    window.location.href = dashboardUrl;
                 } else {
-                    showError(data.message || 'Username atau password salah!');
-                    usernameInput.value = '';
-                    passwordInput.value = '';
-                    usernameInput.focus();
+                    messageDiv.innerHTML = `❌ ${result.error || 'Login gagal'}`;
+                    messageDiv.style.color = '#f87171';
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                
-                let errorMsg = 'Koneksi gagal. ';
-                if (error.message.includes('Failed to fetch')) {
-                    errorMsg += 'Pastikan Apps Script sudah di-deploy dengan akses publik. ';
-                    errorMsg += 'Cek URL Apps Script di file ini sudah benar.';
-                } else {
-                    errorMsg += error.message;
-                }
-                showError(errorMsg);
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = 'Login';
-                loading.style.display = 'none';
+                console.error('Error:', error);
+                messageDiv.innerHTML = '❌ Gagal terhubung ke server autentikasi';
+                messageDiv.style.color = '#f87171';
             }
-        });
-        
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 6000);
         }
-        
-        // Auto focus on username
-        usernameInput.focus();
-        
-        // Enter key submit
-        passwordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loginForm.dispatchEvent(new Event('submit'));
-            }
-        });
     </script>
 </body>
 </html>
