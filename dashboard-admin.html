@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard-admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="logo-placeholder" style="font-size: 40px; text-align: center;">🔥</div>
+            <h2>PHOENIX</h2>
+            <p>ADMIN PANEL</p>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="peserta">
+                    <i class="fas fa-users"></i> Data Peserta
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="jadwal">
+                    <i class="fas fa-calendar-alt"></i> Jadwal Latihan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="pengumuman">
+                    <i class="fas fa-bullhorn"></i> Pengumuman
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="main-content">
+        <div class="top-bar">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="page-title">
+                <h1><i class="fas fa-fire"></i> Phoenix Admin <span id="adminName"></span></h1>
+            </div>
+            <div class="admin-badge" id="adminBadge">
+                <i class="fas fa-user-shield"></i> Admin
+            </div>
+        </div>
+        
+        <!-- Dashboard Page -->
+        <div id="page-dashboard" class="content-panel">
+            <div class="panel-title">
+                <i class="fas fa-chart-line"></i> Overview Dashboard
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3 id="totalPeserta">0</h3>
+                    <p>Total Peserta</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-check"></i>
+                    <h3 id="aktifCount">0</h3>
+                    <p>Peserta Aktif</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chalkboard-user"></i>
+                    <h3>4</h3>
+                    <p>Instruktur</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>12</h3>
+                    <p>Medali</p>
+                </div>
+            </div>
+            
+            <div class="recent-activities">
+                <h3 style="color: #ffbc7a; margin-bottom: 15px;">
+                    <i class="fas fa-clock"></i> Aktivitas Terbaru
+                </h3>
+                <div id="recentList"></div>
+            </div>
+        </div>
+        
+        <!-- Data Peserta Page -->
+        <div id="page-peserta" class="content-panel" style="display: none;">
+            <div class="panel-title">
+                <i class="fas fa-users"></i> Manajemen Peserta
+            </div>
+            <button class="btn-tambah" id="btnTambah">
+                <i class="fas fa-plus-circle"></i> Tambah Peserta
+            </button>
+            <div id="pesertaGrid" class="peserta-grid"></div>
+        </div>
+        
+        <!-- Jadwal Page -->
+        <div id="page-jadwal" class="content-panel" style="display: none;">
+            <div class="panel-title">
+                <i class="fas fa-calendar-alt"></i> Jadwal Latihan
+            </div>
+            <div class="schedule-editor">
+                <div class="schedule-item">
+                    <span class="day">Senin:</span>
+                    <input type="text" id="scheduleMon" value="16:00 - 18:00 WIB" class="schedule-input">
+                </div>
+                <div class="schedule-item">
+                    <span class="day">Selasa:</span>
+                    <input type="text" id="scheduleTue" value="15:30 - 17:30 WIB" class="schedule-input">
+                </div>
+                <div class="schedule-item">
+                    <span class="day">Rabu:</span>
+                    <input type="text" id="scheduleWed" value="16:00 - 18:00 WIB" class="schedule-input">
+                </div>
+                <div class="schedule-item">
+                    <span class="day">Kamis:</span>
+                    <input type="text" id="scheduleThu" value="15:30 - 17:30 WIB" class="schedule-input">
+                </div>
+                <div class="schedule-item">
+                    <span class="day">Sabtu:</span>
+                    <input type="text" id="scheduleSat" value="08:00 - 10:00 WIB" class="schedule-input">
+                </div>
+                <button class="btn-fire" id="saveSchedule" style="margin-top: 20px;">
+                    <i class="fas fa-save"></i> Simpan Jadwal
+                </button>
+            </div>
+        </div>
+        
+        <!-- Pengumuman Page -->
+        <div id="page-pengumuman" class="content-panel" style="display: none;">
+            <div class="panel-title">
+                <i class="fas fa-bullhorn"></i> Kelola Pengumuman
+            </div>
+            <textarea id="announcementText" rows="4" style="width: 100%; background: #2e1200; border: 1px solid #ff884d; color: white; padding: 12px; border-radius: 15px; margin-bottom: 15px;"></textarea>
+            <button class="btn-fire" id="saveAnnouncement">
+                <i class="fas fa-save"></i> Simpan Pengumuman
+            </button>
+            <div class="current-announcement" style="margin-top: 20px; padding: 15px; background: rgba(255,100,0,0.1); border-radius: 15px;">
+                <h4 style="color: #ffaa66;">Pengumuman Saat Ini:</h4>
+                <p id="currentAnnouncement" style="color: #ffddaa;"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Tambah Peserta -->
+    <div id="modalTambah" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Tambah Peserta Baru</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="formPeserta">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="nama" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Panggilan</label>
+                        <input type="text" id="panggilan">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-field">
+                        <label>Tingkat Sabuk</label>
+                        <select id="tingkat">
+                            <option>Sabuk Putih</option>
+                            <option>Sabuk Kuning</option>
+                            <option>Sabuk Hijau</option>
+                            <option>Sabuk Biru</option>
+                            <option>Sabuk Merah</option>
+                            <option>Sabuk Hitam</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label>Asal Dojang</label>
+                        <input type="text" id="dojang">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-field">
+                        <label>Kelas</label>
+                        <input type="text" id="kelas">
+                    </div>
+                    <div class="form-field">
+                        <label>Status</label>
+                        <select id="status">
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Simpan Peserta
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
