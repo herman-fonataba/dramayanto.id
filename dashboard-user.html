@@ -4,150 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phoenix Member Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/dashboard-admin.css">
     <style>
-        .user-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+        .user-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .announcement-box { background: rgba(255, 100, 0, 0.15); border-left: 4px solid #ff6600; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+        .attendance-bar { background: rgba(255, 100, 0, 0.2); border-radius: 30px; height: 30px; overflow: hidden; margin-top: 10px; }
+        .attendance-fill { background: linear-gradient(90deg, #ff5500, #ff9933); width: 85%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; }
+        .user-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; }
+        .logout-btn { background: linear-gradient(145deg, #b34700, #ff6600); border: none; padding: 10px 25px; border-radius: 30px; color: white; cursor: pointer; font-weight: 600; }
+        .schedule-list { list-style: none; }
+        .schedule-list li { padding: 12px; border-bottom: 1px solid rgba(255, 136, 77, 0.3); color: #ffddaa; display: flex; align-items: center; gap: 15px; }
+        .schedule-list li i { width: 30px; color: #ff9933; }
         
-        .announcement-box {
-            background: rgba(255, 100, 0, 0.15);
-            border-left: 4px solid #ff6600;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
+        /* UKT Card Styles */
+        .ukt-card { background: var(--card-bg); border: 1px solid var(--primary); border-radius: 20px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .ukt-status-badge { display: inline-block; padding: 5px 15px; border-radius: 30px; font-size: 0.8rem; font-weight: bold; margin-top: 10px; }
+        .ukt-status-menunggu { background: #f57c00; color: white; }
+        .ukt-status-disetujui { background: #2e7d32; color: white; }
+        .ukt-status-ditolak { background: #c62828; color: white; }
+        .ukt-status-tutup { background: #616161; color: white; }
+        .ukt-status-buka { background: #4caf50; color: white; }
+        .btn-ukt { background: linear-gradient(145deg, #ff5500, #ff9933); border: none; padding: 12px 24px; border-radius: 30px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 15px; }
+        .btn-ukt:hover { transform: translateY(-2px); box-shadow: 0 0 15px #ff5500; }
+        .btn-ukt.disabled, .btn-ukt:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .ukt-info-box { background: rgba(255,100,0,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); }
+        .ukt-date-info { margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); }
         
-        .attendance-bar {
-            background: rgba(255, 100, 0, 0.2);
-            border-radius: 30px;
-            height: 30px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-        
-        .attendance-fill {
-            background: linear-gradient(90deg, #ff5500, #ff9933);
-            width: 85%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .user-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .logout-btn {
-            background: linear-gradient(145deg, #b34700, #ff6600);
-            border: none;
-            padding: 10px 25px;
-            border-radius: 30px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .schedule-list {
-            list-style: none;
-        }
-        
-        .schedule-list li {
-            padding: 12px;
-            border-bottom: 1px solid rgba(255, 136, 77, 0.3);
-            color: #ffddaa;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .schedule-list li i {
-            width: 30px;
-            color: #ff9933;
-        }
-        
-        @media (max-width: 768px) {
-            .user-header {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
+        @media (max-width: 768px) { .user-header { flex-direction: column; text-align: center; } }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #1a0500; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #ff5500, #ff9933); border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="main-content" style="margin-left: 0; max-width: 1200px; margin: 0 auto;">
-        <div class="user-header">
-            <div class="user-info">
-                <div class="profile-icon" style="width: 70px; height: 70px; font-size: 2rem;">
-                    <i class="fas fa-user-ninja"></i>
-                </div>
-                <div>
-                    <h2 style="color: #ffbc7a;" id="userGreeting"></h2>
-                    <p style="color: #ffaa77;" id="userEmailDisplay"></p>
-                </div>
+    <canvas id="fireCanvas"></canvas>
+    <div class="fire-overlay"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <div class="logo-area">
+            <div class="phoenix-logo">
+                <img src="https://phoenix-taekwondo-family.vercel.app/Foto/Phoenix%20Taekwondo%20Family.jpeg" alt="Phoenix Logo" class="sidebar-logo-img" onerror="this.src='https://via.placeholder.com/80?text=PTF'">
+                <div class="fire-ring"></div>
             </div>
-            <button class="logout-btn" id="userLogoutBtn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <h2>PHOENIX</h2>
+            <p>TAEKWONDO FAMILY</p>
+            <div class="flame-line"></div>
         </div>
-        
-        <div class="stats-grid" style="margin-bottom: 30px;">
-            <div class="stat-card">
-                <i class="fas fa-calendar-alt"></i>
-                <h3>2024</h3>
-                <p>Bergabung Sejak</p>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-medal"></i>
-                <h3 id="userSabuk">Sabuk Merah</h3>
-                <p>Tingkat Saat Ini</p>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-chart-line"></i>
-                <h3 id="attendancePercent">85%</h3>
-                <p>Kehadiran</p>
-                <div class="attendance-bar">
-                    <div class="attendance-fill" id="attendanceFill">85%</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="content-panel" style="margin-bottom: 20px;">
-            <h2 style="color: #ffbc7a; margin-bottom: 15px;">
-                <i class="fas fa-bullhorn"></i> Pengumuman
-            </h2>
-            <div id="userAnnouncement" class="announcement-box">
-                <p>Selamat datang di Phoenix Taekwondo Family! Jaga semangat latihan dan disiplin.</p>
-            </div>
-        </div>
-        
-        <div class="content-panel">
-            <h2 style="color: #ffbc7a; margin-bottom: 15px;">
-                <i class="fas fa-calendar-alt"></i> Jadwal Latihan
-            </h2>
-            <ul class="schedule-list" id="userSchedule">
-                <li><i class="fas fa-calendar-day"></i> Senin & Rabu: 16:00 - 18:00 WIB</li>
-                <li><i class="fas fa-calendar-day"></i> Selasa & Kamis: 15:30 - 17:30 WIB</li>
-                <li><i class="fas fa-calendar-day"></i> Sabtu: 08:00 - 10:00 WIB</li>
-                <li><i class="fas fa-map-marker-alt"></i> Lokasi: GOR Phoenix, Jl. Merpati No. 45</li>
-            </ul>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-page="absensi"><i class="fas fa-fingerprint"></i><span>Absensi</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-page="peserta"><i class="fas fa-users"></i><span>Data Peserta</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-page="ukt"><i class="fas fa-chart-line"></i><span>Kenaikan Tingkat</span></a></li>
+            <li class="nav-item"><a href="#" class="nav-link logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <div class="user-info-sidebar"><i class="fas fa-user"></i><div><strong id="sidebarUserName">User</strong><small id="sidebarUserRole">Member</small></div></div>
+            <div class="dojang-badge" id="dojangBadge"><i class="fas fa-school"></i> <span id="dojangName">SMANSA</span></div>
+            <div class="fire-status"><i class="fas fa-fire"></i><span>API SUCI MENYALA</span></div>
         </div>
     </div>
     
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="main-content">
+        <div class="top-bar">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <div class="page-title"><h1><i class="fas fa-fire"></i> <span id="pageTitle">Dashboard</span> <i class="fas fa-dragon"></i></h1></div>
+            <div class="admin-info"><div class="admin-badge"><i class="fas fa-user"></i><span id="userNameDisplay">User</span><span id="userRoleDisplay" class="role-badge">Member</span></div><div class="datetime" id="datetime"></div></div>
+        </div>
+        
+        <div id="page-dashboard" class="content-panel active-page">
+            <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-pie"></i> Overview Dashboard</div><div class="date-filter"><i class="fas fa-calendar-alt"></i><span id="currentDate"></span></div></div>
+            <div class="stats-grid">
+                <div class="stat-card"><i class="fas fa-calendar-alt"></i><h3>2024</h3><p>Bergabung Sejak</p></div>
+                <div class="stat-card"><i class="fas fa-medal"></i><h3 id="userSabuk">Sabuk Merah</h3><p>Tingkat Saat Ini</p></div>
+                <div class="stat-card"><i class="fas fa-chart-line"></i><h3 id="attendancePercent">85%</h3><p>Kehadiran</p><div class="attendance-bar"><div class="attendance-fill" id="attendanceFill">85%</div></div></div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="chart-card"><div class="card-header"><h3><i class="fas fa-chart-line"></i> Kehadiran Mingguan</h3></div><canvas id="attendanceChart" width="400" height="200"></canvas></div>
+                <div class="recent-card"><div class="card-header"><h3><i class="fas fa-clock"></i> Aktivitas Terbaru</h3></div><div id="recentActivities" class="activity-list"></div></div>
+                <div class="announcement-card"><div class="card-header"><h3><i class="fas fa-bullhorn"></i> Pengumuman</h3></div><div id="announcementContent" class="announcement-content"></div></div>
+            </div>
+        </div>
+        
+        <div id="page-absensi" class="content-panel">
+            <div class="panel-header"><div class="panel-title"><i class="fas fa-fingerprint"></i> Absensi Harian</div><div class="date-picker"><input type="date" id="absensiDate" class="fire-input"><button class="btn-fire small" id="filterAbsensi"><i class="fas fa-search"></i> Filter</button></div></div>
+            <div class="absensi-card-grid" id="absensiCardGrid"></div>
+        </div>
+        
+        <div id="page-peserta" class="content-panel">
+            <div class="panel-header"><div class="panel-title"><i class="fas fa-users"></i> Data Peserta</div></div>
+            <div id="pesertaGrid" class="peserta-grid"></div>
+        </div>
+        
+        <div id="page-ukt" class="content-panel">
+            <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-line"></i> Kenaikan Tingkat Sabuk (UKT)</div></div>
+            <div id="userUktContainer" class="ukt-card"><div class="ukt-loading">Memuat informasi pendaftaran...</div></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>
